@@ -202,8 +202,8 @@ do
                                         string name = Console.ReadLine();
                                         if (!string.IsNullOrEmpty(name) && name.Length >= 3)
                                         {
-                                            Car searchCar = cars.FirstOrDefault(c => c.NameModel.Equals(name, StringComparison.OrdinalIgnoreCase));
-                                            if (searchCar==null)
+                                            int searchCar = cars.FindIndex(c => c.NameModel.Equals(name, StringComparison.OrdinalIgnoreCase));
+                                            if (searchCar==-1)
                                             {
                                                 Console.WriteLine("Об'єкт не знайдено");
                                             }
@@ -211,7 +211,7 @@ do
                                             {
                                                 int carIndex = cars.FindIndex(x => x.Equals(searchCar));
                                                 Console.WriteLine($"Об'єкт під індексом: {++carIndex}");
-                                                PrintCarInfo(searchCar);
+                                                PrintCarInfo(cars[searchCar]);
                                             }
                                             break;
                                         }
@@ -265,11 +265,11 @@ do
                                         string name = Console.ReadLine();
                                         if (!string.IsNullOrEmpty(name) && name.Length >= 3)
                                         {
-                                            Car carToRemove = cars.FirstOrDefault(c => c.NameModel.Equals(name, StringComparison.OrdinalIgnoreCase));
+                                            int carToRemove = cars.FindIndex(c => c.NameModel.Equals(name, StringComparison.OrdinalIgnoreCase));
 
-                                            if (carToRemove != null)
+                                            if (carToRemove != -1)
                                             {
-                                                cars.Remove(carToRemove);
+                                                cars.Remove(cars[carToRemove]);
                                                 actualSizeList--;
                                                 Console.WriteLine($"Автомобіль {name} успішно видалено.");
                                             }

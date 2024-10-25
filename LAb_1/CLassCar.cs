@@ -14,7 +14,7 @@ namespace LAb_1
 
     class Car
     {
-        public string name_model = "Unknow";
+        private string name_model = "Unknow";
         private BrandCar brand = BrandCar.UNKNOWN;
         private ColorCar color = ColorCar.UNKNOWN;
         private int max_speed ;
