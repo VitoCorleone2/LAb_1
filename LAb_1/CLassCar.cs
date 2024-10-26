@@ -1,4 +1,5 @@
-﻿using System;
+﻿using LAb_1;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
@@ -12,187 +13,168 @@ using System.Xml.Linq;
 
 namespace LAb_1
 {
-
     class Car
     {
         private string name_model = "Unknow";
-        private static short CarAutoNumber=0;
+        private static short CarAutoNumber = 0;
         private BrandCar brand = BrandCar.UNKNOWN;
         private ColorCar color = ColorCar.UNKNOWN;
-        private int max_speed ;
-        private short number ;
+        private int max_speed;
+        private short number;
         private float weight;
-        private bool engine_is_running= false;        
+        private bool engine_is_running = false;
+
         public string NameModel
         {
             get { return name_model; }
-            set { if (!string.IsNullOrEmpty(value) && value.Length >= 3)
+            set
+            {
+                if (!string.IsNullOrEmpty(value) && value.Length >= 3)
                     name_model = value;
-                else 
-                   throw new ArgumentNullException();
+                else
+                    throw new ArgumentNullException( "Назва моделі повинна бути не менш ніж 3 символи.");
             }
-        }     
+        }
+
         public BrandCar Brand
         {
             get { return brand; }
-            set 
+            set
             {
                 switch (value)
                 {
                     case BrandCar.FORD:
-                        brand = BrandCar.FORD;
-                        break;
                     case BrandCar.CHEVROLET:
-                        brand = BrandCar.CHEVROLET;
-                        break;
                     case BrandCar.MAZDA:
-                        brand = BrandCar.MAZDA;
-                        break;
                     case BrandCar.FERRARI:
-                        brand = BrandCar.FERRARI;
-                        break;
                     case BrandCar.MITSUBISHI:
-                        brand = BrandCar.MITSUBISHI;
-                        break;
                     case BrandCar.SKODA:
-                        brand = BrandCar.SKODA;
-                        break;
                     case BrandCar.VOLKSWAGEN:
-                        brand = BrandCar.VOLKSWAGEN;
+                        brand = value;
                         break;
-                    
                     default:
                         brand = BrandCar.UNKNOWN;
                         throw new ArgumentException("Не існуюча марка авто");
-                        
                 }
-
             }
-        }      
+        }
+
         public ColorCar Color
         {
             get { return color; }
-            set {
-
+            set
+            {
                 switch (value)
                 {
                     case ColorCar.RED:
-                        color = ColorCar.RED;
-                        break;
                     case ColorCar.GREEN:
-                        color = ColorCar.GREEN;
-                        break;
                     case ColorCar.BLUE:
-                        color = ColorCar.BLUE;
-                        break;
                     case ColorCar.PINK:
-                        color = ColorCar.PINK;
-                        break;
                     case ColorCar.PURPLE:
-                        color = ColorCar.PURPLE;
-                        break;
                     case ColorCar.GOLD:
-                        color = ColorCar.GOLD;
-                        break;
                     case ColorCar.ORANGE:
-                        color = ColorCar.ORANGE;
-                        break;
                     case ColorCar.UNKNOWN:
-                        color = ColorCar.UNKNOWN;
+                        color = value;
                         break;
                     default:
                         color = ColorCar.UNKNOWN;
-                        throw new ArgumentException("Не існуючий колір ");
+                        throw new ArgumentException("Не існуючий колір");
                 }
             }
-        }      
+        }
+
         public int MaxSpeed
         {
             get { return max_speed; }
-            set 
+            set
             {
                 if (value > 0 && value <= 500)
                     max_speed = value;
                 else
-                    throw new ArgumentOutOfRangeException("Не допустиме значення швидкості");
+                    throw new ArgumentOutOfRangeException( "Не допустиме значення швидкості (повинно бути від 1 до 500).");
             }
-        }       
+        }
+
         public float Weight
         {
             get { return weight; }
-            set {if (value >= 0 && value <= 5000)
-                weight = value; 
-            else
-                    throw new ArgumentOutOfRangeException("Не можлива вага ");
+            set
+            {
+                if (value >= 0 && value <= 5000)
+                    weight = value;
+                else
+                    throw new ArgumentOutOfRangeException( "Не можлива вага (повинно бути від 0 до 5000).");
             }
-        }       
+        }
+
         public short Number
         {
             get { return number; }
-            set { if(value > 0 && value <= 9999)
-                number = value; 
-            else
-                    throw new ArgumentOutOfRangeException("Не допустиме значення номера");
+            set
+            {
+                if (value > 0 && value <= 9999)
+                    number = value;
+                else
+                    throw new ArgumentOutOfRangeException( "Не допустиме значення номера (повинно бути від 1 до 9999).");
             }
-        }       
+        }
+
         public bool EngineIsRunning
         {
             get { return engine_is_running; }
-           private set { engine_is_running = value; }
+            private set { engine_is_running = value; }
         }
-        public bool ChekWorkEngine()
+
+        public bool CheckWorkEngine()
         {
-            if (EngineIsRunning == true)
-                return true;
-            return false;
+            return EngineIsRunning;
         }
+
         public void EngineStart()
         {
             EngineIsRunning = true;
         }
+
         public void EngineStop()
         {
             EngineIsRunning = false;
-
         }
+
         public Car()
         {
-            NameModel ="AutoName";
+            NameModel = "AutoName";
             Brand = BrandCar.FORD;
             Color = ColorCar.RED;
             MaxSpeed = 180;
             Number = ++CarAutoNumber;
-            Weight = 1400;                               
+            Weight = 1400;
         }
+
         public Car(string Name, short ChooseBrand, short ChooseColor)
         {
-            NameModel=Name;
-            Brand=(BrandCar)ChooseBrand;
-            Color=(ColorCar)ChooseColor;
+            NameModel = Name;
+            Brand = (BrandCar)ChooseBrand;
+            Color = (ColorCar)ChooseColor;
             MaxSpeed = 180;
             Weight = 1400;
             Number = ++CarAutoNumber;
-       
         }
-        public Car(int Speed, short NumberCar, float WeightCar,  string NameModel, short ChooseBrand, short ChooseColor)
-     : this(NameModel, ChooseBrand, ChooseColor)
+
+        public Car(int Speed, short NumberCar, float WeightCar, string NameModel, short ChooseBrand, short ChooseColor)
+            : this(NameModel, ChooseBrand, ChooseColor)
         {
             MaxSpeed = Speed;
             Weight = WeightCar;
             Number = NumberCar;
         }
     }
-
-
-
-
-
 }
-       
-     
-       
-    
 
 
-   
+
+
+
+
+
+
 
