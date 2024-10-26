@@ -63,8 +63,8 @@ namespace LAb_1
                     
                     default:
                         brand = BrandCar.UNKNOWN;
+                        throw new ArgumentException("Не існуюча марка авто");
                         
-                        break;
                 }
 
             }
@@ -102,7 +102,7 @@ namespace LAb_1
                         break;
                     default:
                         color = ColorCar.UNKNOWN;
-                        break;
+                        throw new ArgumentException("Не існуючий колір ");
                 }
             }
         }      
@@ -114,7 +114,7 @@ namespace LAb_1
                 if (value > 0 && value <= 500)
                     max_speed = value;
                 else
-                    throw new ArgumentOutOfRangeException();
+                    throw new ArgumentOutOfRangeException("Не допустиме значення швидкості");
             }
         }       
         public float Weight
@@ -123,7 +123,7 @@ namespace LAb_1
             set {if (value >= 0 && value <= 5000)
                 weight = value; 
             else
-                    throw new ArgumentOutOfRangeException();
+                    throw new ArgumentOutOfRangeException("Не можлива вага ");
             }
         }       
         public short Number
@@ -132,7 +132,7 @@ namespace LAb_1
             set { if(value > 0 && value <= 9999)
                 number = value; 
             else
-                    throw new ArgumentOutOfRangeException();
+                    throw new ArgumentOutOfRangeException("Не допустиме значення номера");
             }
         }       
         public bool EngineIsRunning
@@ -174,7 +174,7 @@ namespace LAb_1
             Number = ++CarAutoNumber;
        
         }
-        public Car(int Speed, float WeightCar, short NumberCar, string NameModel, short ChooseBrand, short ChooseColor)
+        public Car(int Speed, short NumberCar, float WeightCar,  string NameModel, short ChooseBrand, short ChooseColor)
      : this(NameModel, ChooseBrand, ChooseColor)
         {
             MaxSpeed = Speed;

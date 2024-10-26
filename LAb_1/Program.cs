@@ -45,128 +45,98 @@ do
                 case 1:
                     if (actualSizeList < sizeList)
                     {
-                        cars.Add(new Car());
-
-                        bool Repeat = false;
-                        do
+                        Console.WriteLine("Оберіть спосіб заповнення інформації про авто для додавання в список " +
+                            "\nАвтоматична генерація-1\nВвід назви моделі, марки та кольору-2\nВведення всієї інформації-3\nВідміна операції-0");
+                        if(short.TryParse(Console.ReadLine(),out short choose))
                         {
-                            Repeat = false;
-                            Console.Write("Введіть назву моделі автомобіля (мінімум 3 символи) -> ");
-                            string nameCAR = Console.ReadLine();
-                            try
-                            {
-                                cars[cars.Count - 1].NameModel = nameCAR;
-                            }
-                            catch (ArgumentNullException)
-                            {
-                                Repeat = true;
-                                Console.WriteLine("Невірний ввід");
-                            }                                                                                      
-                        } while (Repeat );
-                        do
-                        {
-                            Console.Write("Введіть бренд автомобіля Форд -> 1, Шевроле -> 2, Мазда -> 3, Феррарі -> 4, Міцубісі -> 5, Шкода -> 6, Фольксваген -> 7\n ");
-                            if (short.TryParse(Console.ReadLine(), out short selectBrand))                                                         
-                                cars[cars.Count-1].Brand = (BrandCar)selectBrand;                              
-                            if(cars[cars.Count - 1].Brand == BrandCar.UNKNOWN)
-                            Console.WriteLine("Невірний ввід");
-                        } while (cars[cars.Count - 1].Brand ==BrandCar.UNKNOWN) ;
-
-
-                        do
-                        {
-                            Console.Write("Оберіть  колір автомобіля червоний -> 1, зелений -> 2, синій -> 3, рожевий -> 4, фіолетовий -> 5, золотий -> 6, \nоранжевий -> 7 \n");
-                            if (short.TryParse(Console.ReadLine(), out short selectColor))
-
-
-                                cars[cars.Count - 1].Color = (ColorCar)selectColor;
-
-                            if (cars[cars.Count - 1].Color == ColorCar.UNKNOWN)
-                                Console.WriteLine("Невірний ввід");
-                        } while (cars[cars.Count - 1].Color == ColorCar.UNKNOWN);
-                         do
-                        {Repeat=false;
-                            Console.Write("Введіть максимальну швидкість автомобіля (від 0 до 500 км/год) -> ");
-                            if (int.TryParse(Console.ReadLine(), out int speed))
-                            {
-                                try
-                                {
-                                    cars[cars.Count - 1].MaxSpeed = speed;
-                                }
-                                catch (ArgumentOutOfRangeException)
-                                {
-                                    Repeat = true;
-                                    Console.WriteLine("Невірний ввід");
-                                }
-                            }
-                            else
-                            {
-                                Repeat = true;
-                                Console.WriteLine("Невірний ввід");
-                            }
-
-
-                        } while (Repeat);
-                        do
-                        {Repeat = false;
-                            Console.Write("Введіть унікальний номер автомобіля (від 1 до 9999) -> ");
-                            if (short.TryParse(Console.ReadLine(), out short number))
-                            {
-                                int chek_number_car = cars.FindIndex(x => x.Number.Equals(number));
-                                if (chek_number_car == -1)
-                                {
-                                    try
+                            bool Repeat = false;
+                            switch (choose)
+                            {case 1:
                                     {
-                                        cars[cars.Count - 1].Number = number;
+                                        cars.Add(new Car());
+                                        actualSizeList++;
+                                        Console.WriteLine("Об'єкт успішно додано ");
                                     }
-                                    catch (ArgumentOutOfRangeException)
+                             break;
+                                    case 2:
+                                   
+                                        Repeat = false;
+                                    do
                                     {
-                                        Repeat=true;    
-                                        Console.WriteLine("Невірний ввід");
-                                    }
+                                        Console.Write("Введіть назву моделі автомобіля (мінімум 3 символи) -> ");
+                                        string nameCAR = Console.ReadLine();
+                                        short selectBrand = -1;
+                                        short selectColor = -1;
 
-                                }
-                                else
-                                {Repeat = true;
-                                    Console.WriteLine("Не допустиме значення номера або він уже використовується .");
-                                }
-                            }
-                            else
-                            {
-                                Repeat = true;
-                                Console.WriteLine("Не допустиме значення номера або він уже використовується .");
+                                        Console.Write("Введіть бренд автомобіля Форд -> 1, Шевроле -> 2, Мазда -> 3, Феррарі -> 4, Міцубісі -> 5, Шкода -> 6, Фольксваген -> 7\n ");
+                                        if (short.TryParse(Console.ReadLine(), out short valueBrand)) { selectBrand = valueBrand; }
 
-                            }
-                           
-                               
-                            
-                        } while (Repeat);
-                        do
-                        {
-                            Repeat = false;  
-                            Console.Write("Введіть вагу автомобіля (від 0 до 5000 кг) -> ");
-                            if (float.TryParse(Console.ReadLine(), out float weight) )
-                            {
-                                try
-                                {
-                                    cars[cars.Count - 1].Weight = weight;
-                                }
-                                catch (ArgumentOutOfRangeException)
-                                {Repeat = true;
-                                    Console.WriteLine("Невірний ввід");
+                                        Console.Write("Оберіть  колір автомобіля червоний -> 1, зелений -> 2, синій -> 3, рожевий -> 4, фіолетовий -> 5, золотий -> 6, \nоранжевий -> 7 \n");
+                                        if (short.TryParse(Console.ReadLine(), out short valueColor)) { selectColor = valueColor; }
+                                        try
+                                        {
+                                            cars.Add(new Car(nameCAR, selectBrand, selectColor));
+                                        }
+                                        catch (Exception)
+                                        {
+                                          Repeat = true;
+                                        }
+
+                                        
+                                        
+                                        
+                                    } while (Repeat);
+                                    actualSizeList++;
+                                    Console.WriteLine("Об'єкт успішно додано ");
+                                    break; 
+                                case 3:
+
+                                    Repeat = false;
+                                    do
+                                    {
+                                        Console.Write("Введіть назву моделі автомобіля (мінімум 3 символи) -> ");
+                                        string nameCAR = Console.ReadLine();
+                                        short selectBrand = -1;
+                                        short selectColor = -1;
+                                        int speedCar = -1;
+                                        short valueNumber = -1;
+                                        float valueWeight = -1;
+                                        Console.Write("Введіть бренд автомобіля Форд -> 1, Шевроле -> 2, Мазда -> 3, Феррарі -> 4, Міцубісі -> 5, Шкода -> 6, Фольксваген -> 7\n ");
+                                        if (short.TryParse(Console.ReadLine(), out short valueBrand)) { selectBrand = valueBrand; }
+
+                                        Console.Write("Оберіть  колір автомобіля червоний -> 1, зелений -> 2, синій -> 3, рожевий -> 4, фіолетовий -> 5, золотий -> 6, \nоранжевий -> 7 \n");
+                                        if (short.TryParse(Console.ReadLine(), out short valueColor)) { selectColor = valueColor; }
+
+                                        Console.Write("Введіть максимальну швидкість автомобіля (від 0 до 500 км/год) -> ");
+                                        if (int.TryParse(Console.ReadLine(), out int valueSpeed )){ speedCar = valueSpeed;}
+                                     
+                                        Console.Write("Введіть унікальний номер автомобіля (від 1 до 9999) -> ");
+                                        if (short.TryParse(Console.ReadLine(), out short number))
+                                        {
+                                                int chek_number_car = cars.FindIndex(x => x.Number.Equals(number));
+                                                if (chek_number_car != -1) { Console.WriteLine("Цей номер уже використовується ."); }
+                                                else { valueNumber = number; }
+                                        }                                                                 
+                                                                               
+                                        Console.Write("Введіть вагу автомобіля (від 0 до 5000 кг) -> ");
+                                        if (float.TryParse(Console.ReadLine(), out float weight)) { valueWeight = weight; }
+                                        try
+                                        {
+                                            cars.Add(new Car(valueSpeed, valueNumber, valueWeight, nameCAR, selectBrand, selectColor));
+                                        }
+                                        catch (Exception)
+                                        {
+                                            Repeat = true;                                           
+                                        }
                                     
-                                }
-                                actualSizeList++;
-
+                                    } while (Repeat);
+                                    actualSizeList++;
+                                    Console.WriteLine("Об'єкт успішно додано ");
+                                    break;
+                                default:
+                                    break;
                             }
-                            else
-                            {Repeat=true;
-                                Console.WriteLine("Невірний ввід");
-
-                            }
-
-
-                        } while (Repeat);
+                        }
                     }
                     else
                     {
@@ -225,12 +195,12 @@ do
                                         Console.Write("Введіть номер автомобіля для пошуку -> ");
                                         if (short.TryParse(Console.ReadLine(), out short num))
                                         {
-                                            Car searchCar = cars.FirstOrDefault(x => x.Number.Equals(num));
-                                            if (searchCar != null)
+                                            int searchCar = cars.FindIndex(x => x.Number.Equals(num));
+                                            if (searchCar != -1)
                                             {
                                                 int carIndex = cars.FindIndex(x => x.Equals(searchCar));
                                                 Console.WriteLine($"Об'єкт під індексом: {++carIndex}");
-                                                PrintCarInfo(searchCar);
+                                                PrintCarInfo(cars[carIndex]);
                                                 break;
                                             }
                                             else                                            
