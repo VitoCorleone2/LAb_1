@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Linq.Expressions;
 using System.Net.Security;
@@ -15,6 +16,7 @@ namespace LAb_1
     class Car
     {
         private string name_model = "Unknow";
+        private static short CarAutoNumber=0;
         private BrandCar brand = BrandCar.UNKNOWN;
         private ColorCar color = ColorCar.UNKNOWN;
         private int max_speed ;
@@ -132,15 +134,12 @@ namespace LAb_1
             else
                     throw new ArgumentOutOfRangeException();
             }
-        }
-       
-
+        }       
         public bool EngineIsRunning
         {
             get { return engine_is_running; }
            private set { engine_is_running = value; }
         }
-
         public bool ChekWorkEngine()
         {
             if (EngineIsRunning == true)
@@ -155,6 +154,32 @@ namespace LAb_1
         {
             EngineIsRunning = false;
 
+        }
+        public Car()
+        {
+            NameModel ="AutoName";
+            Brand = BrandCar.FORD;
+            Color = ColorCar.RED;
+            MaxSpeed = 180;
+            Number = ++CarAutoNumber;
+            Weight = 1400;                               
+        }
+        public Car(string Name, short ChooseBrand, short ChooseColor)
+        {
+            NameModel=Name;
+            Brand=(BrandCar)ChooseBrand;
+            Color=(ColorCar)ChooseColor;
+            MaxSpeed = 180;
+            Weight = 1400;
+            Number = ++CarAutoNumber;
+       
+        }
+        public Car(int Speed, float WeightCar, short NumberCar, string NameModel, short ChooseBrand, short ChooseColor)
+     : this(NameModel, ChooseBrand, ChooseColor)
+        {
+            MaxSpeed = Speed;
+            Weight = WeightCar;
+            Number = NumberCar;
         }
     }
 
