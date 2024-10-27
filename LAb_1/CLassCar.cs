@@ -166,12 +166,17 @@ namespace LAb_1
             StartTravel();
         }
 
-        private void StartTravel() 
+        private void StartTravel()
         {
-            if (Fuel!=0) { EngineIsRunning = true; }
-            
             short required_amount_of_fuel = 0;
 
+           
+            if (Fuel == 0)
+            {
+                throw new ArgumentOutOfRangeException("Паливо відсутнє. Потрібно заправитися!");
+            }
+
+            
             switch (Distance)
             {
                 case 1:
@@ -188,6 +193,7 @@ namespace LAb_1
                     break;
             }
 
+           
             if (Fuel < required_amount_of_fuel)
             {
                 throw new ArgumentOutOfRangeException("Для подорожі на обрану дистанцію не вистачає палива, потрібно заправитися!");
@@ -195,8 +201,11 @@ namespace LAb_1
             else
             {
                 Fuel -= required_amount_of_fuel;
+                if(Fuel == 0) { EngineIsRunning = false; }
             }
         }
+
+
 
         public void EngineStopWork()
         {

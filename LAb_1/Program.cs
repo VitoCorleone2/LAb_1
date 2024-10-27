@@ -306,9 +306,10 @@ do
                         {
                             index--;
 
-                            Console.WriteLine("Що бажаєте зробити з авто?\nЗапустити -> 1\nЗупинити -> 2\nПеревірити -> 3\nЗаправити ->4");
+                            Console.WriteLine("Що бажаєте зробити з авто?\nЗапустити -> 1\nПодорожувати -> 2\nЗупинити -> 3\nПеревірити -> 4\nЗаправити ->5");
                             if (short.TryParse(Console.ReadLine(), out short action))
                             {
+                                bool result = true;
                                 switch (action)
                                 {
                                     case 1:
@@ -318,30 +319,32 @@ do
                                         }
                                         else
                                         {
-                                            Console.WriteLine("Оберіть що хочете зробити.Просто запустити -1 \nЗапустити і поїхати ?-2\nПовернутися  - 3\n Відміна-0");
-                                            if(short.TryParse(Console.ReadLine(),out short ActionWithEngine))
+                                            try
+                                            {
+                                                cars[index].EngineStartWork();
+                                            }
+                                            catch (Exception ex)
+                                            {
+                                                result = false;
+                                                Console.WriteLine($"{ex.Message}");
+                                            }
+                                            if (result) { Console.WriteLine("........РPPPPPPPPPP"); }
+                                        }
+                                        break;
+                                    case 2:
+                                        if (cars[index].CheckWorkEngine())
+                                        {
+                                            Console.WriteLine("Оберіть що хочете зробити.\nПоїхати -> 1\nПовернутися  -> 2\n Відміна-0");
+                                            if (short.TryParse(Console.ReadLine(), out short ActionWithEngine))
 
                                             {
-                                                bool result = true;
+
                                                 switch (ActionWithEngine)
                                                 {
                                                     case 1:
-                                                        try
-                                                        {
-                                                            cars[index].EngineStartWork();
-                                                        }
-                                                        catch (Exception ex)
-                                                        {
-                                                            result = false;  
-                                                            Console.WriteLine($"{ex.Message}");
-                                                        }
-                                                        if (result) { Console.WriteLine("........РPPPPPPPPPP"); }
-                                                        
-                                                        break;
-                                                    case 2:
                                                         Console.WriteLine("Оберіть пункт призначення \n найближче місто  - 1 \n Обласний центр  - 2\n Столиця  - 3" +
                                                             "\nМаксимально доступна дистанція  -4 ");
-                                                        if (short.TryParse(Console.ReadLine(), out short distance)&&distance<5)
+                                                        if (short.TryParse(Console.ReadLine(), out short distance) && distance < 5)
                                                         {
                                                             try
                                                             {
@@ -350,21 +353,22 @@ do
                                                             catch (ArgumentOutOfRangeException ex)
                                                             {
                                                                 result = false;
-                                                                Console.WriteLine($"{ex.Message}"); 
-                                                            }                                                            
-                                                                                                                       
+                                                                Console.WriteLine($"{ex.Message}");
+                                                            }
+
                                                         }
                                                         else
                                                         {
-                                                            result= false;
-                                                            Console.WriteLine("Не визначений пункт призначення "); 
+                                                            result = false;
+                                                            Console.WriteLine("Не визначений пункт призначення ");
                                                         }
-                                                        if (result) {
+                                                        if (result)
+                                                        {
                                                             Console.WriteLine("Прибуто в місце призначення ");
-                                                            Console.WriteLine("........РPPPPPPPPPPppppp"); 
+                                                            Console.WriteLine("........РPPPPPPPPPPppppp");
                                                         }
                                                         break;
-                                                    case 3:
+                                                    case 2:
                                                         try
                                                         {
                                                             cars[index].EngineStartTravel();
@@ -386,8 +390,12 @@ do
                                                 }
                                             }
                                         }
+                                        else
+                                        {
+                                            Console.WriteLine("Для початку переміщення потрібно запустити двигун");
+                                        }
                                         break;
-                                    case 2:
+                                    case 3:
                                         if (cars[index].CheckWorkEngine())
                                         {
                                             cars[index].EngineStopWork();
@@ -397,13 +405,13 @@ do
                                             Console.WriteLine("Двигун ще не запущено");                                        
                                         break;
 
-                                    case 3:
+                                    case 4:
                                         if (cars[index].CheckWorkEngine())                                        
                                             Console.WriteLine("Двигун працює");                                        
                                         else                                        
                                             Console.WriteLine("Двигун не працює");                                        
                                         break;
-                                        case 4:
+                                        case 5:
                                         cars[index].Refill();
                                         break;
                                     default:
