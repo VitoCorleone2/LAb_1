@@ -6,6 +6,7 @@ using System.Linq;
 using System.Linq.Expressions;
 using System.Net.Security;
 using System.Reflection;
+using System.Reflection.Metadata;
 using System.Runtime.CompilerServices;
 using System.Text;
 using System.Threading.Tasks;
@@ -22,6 +23,8 @@ namespace LAb_1
         private int max_speed;
         private short number;
         private float weight;
+        private short fuel=0;
+        private short maximum_tank_volume=100;
         private bool engine_is_running = false;
 
         public string NameModel
@@ -118,6 +121,12 @@ namespace LAb_1
                     throw new ArgumentOutOfRangeException( "Не допустиме значення номера (повинно бути від 1 до 9999).");
             }
         }
+ 
+        public short Fuel
+        {
+            get { return fuel; }
+           private set { fuel = value; }
+        }
 
         public bool EngineIsRunning
         {
@@ -130,14 +139,73 @@ namespace LAb_1
             return EngineIsRunning;
         }
 
-        public void EngineStart()
+       
+
+        private short distance = 0;
+
+        public short Distance
         {
-            EngineIsRunning = true;
+            get { return distance; }
+            private set { distance = value; }
         }
 
-        public void EngineStop()
+        public void EngineStartWork() 
+        {
+            if (Fuel != 0) { EngineIsRunning = true; }
+            else { throw new Exception("Не має палива"); }
+        }
+
+        public void EngineStartTravel(short value) 
+        {
+            Distance = value;
+            StartTravel();
+        }
+
+        public void EngineStartTravel() 
+        {
+            StartTravel();
+        }
+
+        private void StartTravel() 
+        {
+            if (Fuel!=0) { EngineIsRunning = true; }
+            
+            short required_amount_of_fuel = 0;
+
+            switch (Distance)
+            {
+                case 1:
+                    required_amount_of_fuel = 5;
+                    break;
+                case 2:
+                    required_amount_of_fuel = 10;
+                    break;
+                case 3:
+                    required_amount_of_fuel = 20;
+                    break;
+                case 4:
+                    required_amount_of_fuel = Fuel;
+                    break;
+            }
+
+            if (Fuel < required_amount_of_fuel)
+            {
+                throw new ArgumentOutOfRangeException("Для подорожі на обрану дистанцію не вистачає палива, потрібно заправитися!");
+            }
+            else
+            {
+                Fuel -= required_amount_of_fuel;
+            }
+        }
+
+        public void EngineStopWork()
         {
             EngineIsRunning = false;
+        }
+
+        public void Refill()
+        {
+            Fuel=maximum_tank_volume;
         }
 
         public Car()
