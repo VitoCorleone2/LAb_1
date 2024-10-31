@@ -3,7 +3,7 @@
   <Class Name="LAb_1.Car">
     <Position X="1.25" Y="0.5" Width="4.75" />
     <TypeIdentifier>
-      <HashCode>AAEAAAAAQAAARAAAAEAEhAAAACAAAACgAAAAgQABEJE=</HashCode>
+      <HashCode>AAEAAAAAAAAARAAAAEAEhAAAACAAAACgBAAAgQABEJA=</HashCode>
       <FileName>CLassCar.cs</FileName>
     </TypeIdentifier>
   </Class>
