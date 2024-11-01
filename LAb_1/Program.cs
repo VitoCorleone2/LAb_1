@@ -21,7 +21,7 @@ void PrintCarInfo(Car car)
 
 Console.WriteLine("Початок роботи");
 List<Car> cars = new List<Car>();
-int actualSizeList = 0;
+
 bool repeat = true;
 
 do
@@ -44,7 +44,7 @@ do
             switch (selection)
             {
                 case 1:
-                    if (actualSizeList < sizeList)
+                    if (Car.Count < sizeList)
                     {
                         Console.WriteLine("Оберіть спосіб заповнення інформації про авто для додавання в список " +
                             "\nАвтоматична генерація-1\nВвід назви моделі, марки та кольору-2\nВведення всієї інформації-3\nВідміна операції-0");
@@ -56,7 +56,7 @@ do
                                 case 1:
                                     {
                                         cars.Add(new Car());
-                                        actualSizeList++;
+                                      
                                         Console.WriteLine("Об'єкт успішно додано ");
                                     }
                                     break;
@@ -80,7 +80,7 @@ do
                                             try
                                             {
                                                 cars.Add(new Car(nameCAR, selectBrand, selectColor));
-                                                actualSizeList++;
+                                               
                                                 Console.WriteLine("Об'єкт успішно додано ");
                                                 Repeat = false; 
                                             }
@@ -136,7 +136,7 @@ do
                                             try
                                             {
                                                 cars.Add(new Car(speedCar, valueNumber, valueWeight, nameCAR, selectBrand, selectColor));
-                                                actualSizeList++;
+                                                
                                                 Console.WriteLine("Об'єкт успішно додано ");
                                                 Repeat = false; 
                                             }
@@ -258,7 +258,8 @@ do
                                             if (carToRemove != -1)
                                             {
                                                 cars.Remove(cars[carToRemove]);
-                                                actualSizeList--;
+                                                Car.Count--;
+
                                                 Console.WriteLine($"Автомобіль {name} успішно видалено.");
                                             }
                                             else                                            
@@ -277,7 +278,7 @@ do
                                         {
                                             --num;
                                             cars.RemoveAt(num);
-                                            actualSizeList--;
+                                            Car.Count--;
                                             Console.WriteLine("Автомобіль успішно видалено.");
                                             break;
                                         }

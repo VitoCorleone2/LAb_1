@@ -17,15 +17,25 @@ namespace LAb_1
     class Car
     {
         private string name_model = "Unknow";
-        private static short CarAutoNumber = 0;
+
         private BrandCar brand = BrandCar.UNKNOWN;
         private ColorCar color = ColorCar.UNKNOWN;
         private int max_speed;
         private short number;
         private float weight;
-        private short fuel=0;
-        private short maximum_tank_volume=100;
+        private short fuel = 0;
+        private short maximum_tank_volume = 100;
         private bool engine_is_running = false;
+
+        private static int count;
+
+        public static int Count
+        {
+            get { return count; }
+            set { count = value; }
+        }
+
+
 
         public string NameModel
         {
@@ -35,7 +45,7 @@ namespace LAb_1
                 if (!string.IsNullOrEmpty(value) && value.Length >= 3)
                     name_model = value;
                 else
-                    throw new ArgumentNullException( "Назва моделі повинна бути не менш ніж 3 символи.");
+                    throw new ArgumentNullException("Назва моделі повинна бути не менш ніж 3 символи.");
             }
         }
 
@@ -94,7 +104,7 @@ namespace LAb_1
                 if (value > 0 && value <= 500)
                     max_speed = value;
                 else
-                    throw new ArgumentOutOfRangeException( "Не допустиме значення швидкості (повинно бути від 1 до 500).");
+                    throw new ArgumentOutOfRangeException("Не допустиме значення швидкості (повинно бути від 1 до 500).");
             }
         }
 
@@ -106,7 +116,7 @@ namespace LAb_1
                 if (value >= 0 && value <= 5000)
                     weight = value;
                 else
-                    throw new ArgumentOutOfRangeException( "Не можлива вага (повинно бути від 0 до 5000).");
+                    throw new ArgumentOutOfRangeException("Не можлива вага (повинно бути від 0 до 5000).");
             }
         }
 
@@ -118,14 +128,14 @@ namespace LAb_1
                 if (value > 0 && value <= 9999)
                     number = value;
                 else
-                    throw new ArgumentOutOfRangeException( "Не допустиме значення номера (повинно бути від 1 до 9999).");
+                    throw new ArgumentOutOfRangeException("Не допустиме значення номера (повинно бути від 1 до 9999).");
             }
         }
- 
+
         public short Fuel
         {
             get { return fuel; }
-           private set { fuel = value; }
+            private set { fuel = value; }
         }
 
         public bool EngineIsRunning
@@ -139,44 +149,39 @@ namespace LAb_1
             return EngineIsRunning;
         }
 
-       
+
 
         private short distance = 0;
-
         public short Distance
         {
             get { return distance; }
             private set { distance = value; }
         }
-
-        public void EngineStartWork() 
+        public void EngineStartWork()
         {
             if (Fuel != 0) { EngineIsRunning = true; }
             else { throw new Exception("Не має палива"); }
         }
-
-        public void EngineStartTravel(short value) 
+        public void EngineStartTravel(short value)
         {
             Distance = value;
             StartTravel();
         }
-
-        public void EngineStartTravel() 
+        public void EngineStartTravel()
         {
             StartTravel();
         }
-
         private void StartTravel()
         {
             short required_amount_of_fuel = 0;
 
-           
+
             if (Fuel == 0)
             {
                 throw new ArgumentOutOfRangeException("Паливо відсутнє. Потрібно заправитися!");
             }
 
-            
+
             switch (Distance)
             {
                 case 1:
@@ -193,7 +198,7 @@ namespace LAb_1
                     break;
             }
 
-           
+
             if (Fuel < required_amount_of_fuel)
             {
                 throw new ArgumentOutOfRangeException("Для подорожі на обрану дистанцію не вистачає палива, потрібно заправитися!");
@@ -201,48 +206,51 @@ namespace LAb_1
             else
             {
                 Fuel -= required_amount_of_fuel;
-                if(Fuel == 0) { EngineIsRunning = false; }
+                if (Fuel == 0) { EngineIsRunning = false; }
             }
         }
-
-
-
         public void EngineStopWork()
         {
             EngineIsRunning = false;
         }
-
         public void Refill()
         {
-            Fuel=maximum_tank_volume;
+            Fuel = maximum_tank_volume;
         }
-
         public Car()
-        {
+        { Random random = new Random();
+            short autonumber = (short)random.Next(1, 10000);
             NameModel = "AutoName";
             Brand = BrandCar.FORD;
             Color = ColorCar.RED;
             MaxSpeed = 180;
-            Number = ++CarAutoNumber;
+            Number = autonumber;
             Weight = 1400;
+            Count++;
         }
-
         public Car(string Name, short ChooseBrand, short ChooseColor)
         {
-            NameModel = Name;
-            Brand = (BrandCar)ChooseBrand;
-            Color = (ColorCar)ChooseColor;
-            MaxSpeed = 180;
-            Weight = 1400;
-            Number = ++CarAutoNumber;
-        }
+            {
+                Random random = new Random();
+                short autonumber = (short)random.Next(1, 10000);
+                NameModel = Name;
+                Brand = (BrandCar)ChooseBrand;
+                Color = (ColorCar)ChooseColor;
+                MaxSpeed = 180;
+                Weight = 1400;
+                Number = autonumber;
+                Count++;
+            }
 
+          
+        }
         public Car(int Speed, short NumberCar, float WeightCar, string NameModel, short ChooseBrand, short ChooseColor)
-            : this(NameModel, ChooseBrand, ChooseColor)
+          : this(NameModel, ChooseBrand, ChooseColor)
         {
             MaxSpeed = Speed;
             Weight = WeightCar;
             Number = NumberCar;
+            Count++;
         }
     }
 }
