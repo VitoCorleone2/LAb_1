@@ -71,57 +71,51 @@ do
                                 case 1:
                                     {
                                         cars.Add(new Car());
-                                      
                                         Console.WriteLine("Об'єкт успішно додано ");
                                     }
                                     break;
 
                                 case 2:
                                     {
-                                        Repeat = false;
                                         do
                                         {
-                                            Console.Write("Введіть назву моделі автомобіля (мінімум 3 символи) -> ");
-                                            string nameCAR = Console.ReadLine();
-                                            short selectBrand = -1;
-                                            short selectColor = -1;
+                                            Repeat = false;
+                                            Console.Write("Введіть інформацію про авто в такому форматі (Для коректного визначення використовуйте англійську): ");
+                                            Console.WriteLine("\nНазва , Марка , Колір");
 
-                                            Console.Write("Введіть бренд автомобіля Форд -> 1, Шевроле -> 2, Мазда -> 3, Феррарі -> 4, Міцубісі -> 5, Шкода -> 6, Фольксваген -> 7\n ");
-                                            if (short.TryParse(Console.ReadLine(), out short valueBrand)) { selectBrand = valueBrand; }
-
-                                            Console.Write("Оберіть колір автомобіля червоний -> 1, зелений -> 2, синій -> 3, рожевий -> 4, фіолетовий -> 5, золотий -> 6, оранжевий -> 7 \n");
-                                            if (short.TryParse(Console.ReadLine(), out short valueColor)) { selectColor = valueColor; }
-
-                                            try
-                                            {
-                                                cars.Add(new Car(nameCAR, selectBrand, selectColor));
-                                               
-                                                Console.WriteLine("Об'єкт успішно додано ");
-                                                Repeat = false; 
-                                            }
-                                            catch (Exception ex)
+                                            if (!Car.TryParse(Console.ReadLine(), false, out Car obj))
                                             {
                                                 Repeat = true;
-                                                Console.WriteLine("Помилка: " + ex.Message + "\nСпробуйте ще раз.");
+                                                Console.WriteLine("Невірний формат введених даних");
+                                            }
+                                            else
+                                            {
+                                                cars.Add(obj); 
+                                                Console.WriteLine("Об'єкт успішно додано ");
                                             }
                                         } while (Repeat);
-                                        Console.WriteLine("Об'єкт успішно додано ");
                                     }
                                     break;
 
                                 case 3:
                                     {
-                                        Repeat = false;
                                         do
                                         {
-                                            Console.Write("Введіть інформацію про авто в такому форматі");
-                                            Console.Write("Назва , Марка , Колір , Максимальна швидкість , Номер авто , Вага ");                                       
-                                            if (!Car.TryParse(Console.ReadLine(),out Car obj))
+                                            Repeat = false;
+                                            Console.Write("Введіть інформацію про авто в такому форматі (Для коректного визначення використовуйте англійську): ");
+                                            Console.WriteLine("\nНазва , Номер , Марка , Колір , Максимальна швидкість , Вага");
+
+                                            if (!Car.TryParse(Console.ReadLine(), true, out Car obj)) 
                                             {
-                                               Repeat=true; 
-                                            }                                         
+                                                Repeat = true;
+                                                Console.WriteLine("Невірний формат введених даних");
+                                            }
+                                            else
+                                            {
+                                                cars.Add(obj);
+                                                Console.WriteLine("Об'єкт успішно додано ");
+                                            }
                                         } while (Repeat);
-                                        Console.WriteLine("Об'єкт успішно додано ");
                                     }
                                     break;
 

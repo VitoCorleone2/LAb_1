@@ -263,29 +263,46 @@ namespace LAb_1
             Number = NumberCar;
             Count++;
         }
-        public static Car Parse(string s)
+        public static Car Parse(string s, bool fullFormat = true)
         {
             if (string.IsNullOrEmpty(s))
                 throw new ArgumentNullException("Рядок не може бути порожнім");
-            char [] chars = {'/', ',', '.', '(',')' ,'|','{','}' } ;
+
+            char[] chars = { '/', ',', '.', '(', ')', '|', '{', '}' };
             var parts = s.Split(chars);
-            if (parts.Length != 6)
-                throw new FormatException("Невірний формат рядка");
 
-            string nameModel = parts[0].Trim();
-            short number =short.Parse(parts[1].Trim());
-            BrandCar brand = (BrandCar)Enum.Parse(typeof(BrandCar), parts[2].Trim(), true);
-            ColorCar color = (ColorCar)Enum.Parse(typeof(ColorCar), parts[3].Trim(), true);
-            int maxSpeed = int.Parse(parts[4].Trim());
-            float weight = float.Parse(parts[5].Trim());
+            if (fullFormat)
+            {
+                if (parts.Length != 6)
+                    throw new FormatException("Невірний формат рядка");
 
-            return new Car(nameModel, (short)brand, (short)color, maxSpeed, number,   weight);
+                string nameModel = parts[0].Trim();
+                short number = short.Parse(parts[1].Trim());
+                BrandCar brand = (BrandCar)Enum.Parse(typeof(BrandCar), parts[2].Trim(), true);
+                ColorCar color = (ColorCar)Enum.Parse(typeof(ColorCar), parts[3].Trim(), true);
+                int maxSpeed = int.Parse(parts[4].Trim());
+                float weight = float.Parse(parts[5].Trim());
+
+                return new Car(nameModel, (short)brand, (short)color, maxSpeed, number, weight);
+            }
+            else
+            {
+                if (parts.Length != 3)
+                    throw new FormatException("Невірний формат скороченого рядка");
+
+                string nameModel = parts[0].Trim();
+                BrandCar brand = (BrandCar)Enum.Parse(typeof(BrandCar), parts[1].Trim(), true);
+                ColorCar color = (ColorCar)Enum.Parse(typeof(ColorCar), parts[2].Trim(), true);
+
+                return new Car(nameModel, (short)brand, (short)color);
+            }
         }
-        public static bool TryParse(string s, out Car obj)
+
+        public static bool TryParse(string s, bool fullFormat, out Car obj)
         {
             try
             {
-                obj = Parse(s);
+                obj = Parse(s, fullFormat);
                 return true;
             }
             catch
