@@ -315,6 +315,7 @@ namespace LAb_1
         {
             return $"{name_model}, {brand}, {color}, {max_speed}, {weight}";
         }
+
     }
 }
 
