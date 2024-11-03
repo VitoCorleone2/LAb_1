@@ -16,8 +16,8 @@ namespace LAb_1
 {
     class Car
     {
-        private string name_model = "Unknow";
-
+        private string name_model = "UNKNOW";
+        private static string country = "UNKNOW";
         private BrandCar brand = BrandCar.UNKNOWN;
         private ColorCar color = ColorCar.UNKNOWN;
         private int max_speed;
@@ -35,7 +35,17 @@ namespace LAb_1
             set { count = value; }
         }
 
-
+        public static string Country
+        {
+            get { return country; }
+            set
+            {
+                if (!string.IsNullOrEmpty(value) && value.Length >= 3)
+                    country = value;
+                else
+                    throw new ArgumentNullException("Назва моделі повинна бути не менш ніж 3 символи.");
+            }
+        }
 
         public string NameModel
         {
@@ -217,6 +227,7 @@ namespace LAb_1
         {
             Fuel = maximum_tank_volume;
         }
+
         public Car()
         { Random random = new Random();
             short autonumber = (short)random.Next(1, 10000);
@@ -243,14 +254,49 @@ namespace LAb_1
             }
 
           
-        }
-        public Car(int Speed, short NumberCar, float WeightCar, string NameModel, short ChooseBrand, short ChooseColor)
+        }        
+        public Car(string NameModel, short ChooseBrand, short ChooseColor,int Speed, short NumberCar, float WeightCar)
           : this(NameModel, ChooseBrand, ChooseColor)
         {
             MaxSpeed = Speed;
             Weight = WeightCar;
             Number = NumberCar;
             Count++;
+        }
+        public static Car Parse(string s)
+        {
+            if (string.IsNullOrEmpty(s))
+                throw new ArgumentNullException("Рядок не може бути порожнім");
+            char [] chars = {'/', ',', '.', '(',')' ,'|','{','}' } ;
+            var parts = s.Split(chars);
+            if (parts.Length != 6)
+                throw new FormatException("Невірний формат рядка");
+
+            string nameModel = parts[0].Trim();
+            short number =short.Parse(parts[1].Trim());
+            BrandCar brand = (BrandCar)Enum.Parse(typeof(BrandCar), parts[2].Trim(), true);
+            ColorCar color = (ColorCar)Enum.Parse(typeof(ColorCar), parts[3].Trim(), true);
+            int maxSpeed = int.Parse(parts[4].Trim());
+            float weight = float.Parse(parts[5].Trim());
+
+            return new Car(nameModel, (short)brand, (short)color, maxSpeed, number,   weight);
+        }
+        public static bool TryParse(string s, out Car obj)
+        {
+            try
+            {
+                obj = Parse(s);
+                return true;
+            }
+            catch
+            {
+                obj = null;
+                return false;
+            }
+        }
+        public override string ToString()
+        {
+            return $"{name_model}, {brand}, {color}, {max_speed}, {weight}";
         }
     }
 }

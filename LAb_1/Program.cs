@@ -11,6 +11,7 @@ using static System.Runtime.InteropServices.JavaScript.JSType;
 void PrintCarInfo(Car car)
 {
     Console.WriteLine("\nІнформація про автомобіль:");
+    Console.WriteLine($"Країна регестрації {Car.Country}");
     Console.WriteLine($"Назва моделі: {car.NameModel}");
     Console.WriteLine($"Бренд: {car.Brand}");
     Console.WriteLine($"Колір: {car.Color}");
@@ -21,7 +22,21 @@ void PrintCarInfo(Car car)
 
 Console.WriteLine("Початок роботи");
 List<Car> cars = new List<Car>();
+Console.WriteLine("Введіть країну регестрації");
+bool correct = false;
+do
+{
+    try
+    {
+        Car.Country = Console.ReadLine();    
+    }
+    catch (ArgumentNullException ex)
+    {
+        correct = true;
+        Console.WriteLine("Помилка: " + ex.Message + "\nСпробуйте ще раз.");
 
+    }
+} while (correct);
 bool repeat = true;
 
 do
@@ -99,52 +114,12 @@ do
                                         Repeat = false;
                                         do
                                         {
-                                            Console.Write("Введіть назву моделі автомобіля (мінімум 3 символи) -> ");
-                                            string nameCAR = Console.ReadLine();
-                                            short selectBrand = -1;
-                                            short selectColor = -1;
-                                            int speedCar = -1;
-                                            short valueNumber = -1;
-                                            float valueWeight = -1;
-
-                                            Console.Write("Введіть бренд автомобіля Форд -> 1, Шевроле -> 2, Мазда -> 3, Феррарі -> 4, Міцубісі -> 5, Шкода -> 6, Фольксваген -> 7\n ");
-                                            if (short.TryParse(Console.ReadLine(), out short valueBrand)) { selectBrand = valueBrand; }
-
-                                            Console.Write("Оберіть колір автомобіля червоний -> 1, зелений -> 2, синій -> 3, рожевий -> 4, фіолетовий -> 5, золотий -> 6, оранжевий -> 7 \n");
-                                            if (short.TryParse(Console.ReadLine(), out short valueColor)) { selectColor = valueColor; }
-
-                                            Console.Write("Введіть максимальну швидкість автомобіля (від 0 до 500 км/год) -> ");
-                                            if (int.TryParse(Console.ReadLine(), out int valueSpeed)) { speedCar = valueSpeed; }
-
-                                            Console.Write("Введіть унікальний номер автомобіля (від 1 до 9999) -> ");
-                                            if (short.TryParse(Console.ReadLine(), out short number))
+                                            Console.Write("Введіть інформацію про авто в такому форматі");
+                                            Console.Write("Назва , Марка , Колір , Максимальна швидкість , Номер авто , Вага ");                                       
+                                            if (!Car.TryParse(Console.ReadLine(),out Car obj))
                                             {
-                                                int chek_number_car = cars.FindIndex(x => x.Number.Equals(number));
-                                                if (chek_number_car != -1)
-                                                {
-                                                    Console.WriteLine("Цей номер уже використовується.");
-                                                }
-                                                else
-                                                {
-                                                    valueNumber = number;
-                                                }
-                                            }
-
-                                            Console.Write("Введіть вагу автомобіля (від 0 до 5000 кг) -> ");
-                                            if (float.TryParse(Console.ReadLine(), out float weight)) { valueWeight = weight; }
-
-                                            try
-                                            {
-                                                cars.Add(new Car(speedCar, valueNumber, valueWeight, nameCAR, selectBrand, selectColor));
-                                                
-                                                Console.WriteLine("Об'єкт успішно додано ");
-                                                Repeat = false; 
-                                            }
-                                            catch (Exception ex)
-                                            {
-                                                Repeat = true;
-                                                Console.WriteLine("Помилка: " + ex.Message + "\nСпробуйте ще раз.");
-                                            }
+                                               Repeat=true; 
+                                            }                                         
                                         } while (Repeat);
                                         Console.WriteLine("Об'єкт успішно додано ");
                                     }
@@ -162,11 +137,13 @@ do
                     }
                     break;
                 case 2:
-                    if (cars.Count > 0) 
+                    if (cars.Count > 0)
                     {
+                        Console.WriteLine($"Кількість об'єктів->{Car.Count}");
                         for (int i = 0; i < cars.Count; i++) 
                         {
                             PrintCarInfo(cars[i]);
+                           
                         }
                     }
                     else
