@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 namespace LAb_1
 {   
    
-    enum ColorCar
+   public  enum ColorCar
     {
         RED=1,
         GREEN=2,

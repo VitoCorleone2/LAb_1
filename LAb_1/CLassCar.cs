@@ -14,7 +14,7 @@ using System.Xml.Linq;
 
 namespace LAb_1
 {
-     class Car
+   public class Car
     {
         private string name_model = "UNKNOW";
         private static string country = "UNKNOW";
@@ -27,7 +27,7 @@ namespace LAb_1
         private short maximum_tank_volume = 100;
         private bool engine_is_running = false;
 
-        private static int count;
+        private static int count=0;
 
         public static int Count
         {
@@ -145,7 +145,7 @@ namespace LAb_1
         public short Fuel
         {
             get { return fuel; }
-            private set { fuel = value; }
+             set { fuel = value; }
         }
 
         public bool EngineIsRunning

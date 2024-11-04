@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace LAb_1
 {
-    enum BrandCar
+    public enum BrandCar
     {
         FORD=1,
         CHEVROLET=2,
