@@ -10,14 +10,9 @@ using static System.Runtime.InteropServices.JavaScript.JSType;
 
 void PrintCarInfo(Car car)
 {
-    Console.WriteLine("\nІнформація про автомобіль:");
-    Console.WriteLine($"Країна регестрації {Car.Country}");
-    Console.WriteLine($"Назва моделі: {car.NameModel}");
-    Console.WriteLine($"Бренд: {car.Brand}");
-    Console.WriteLine($"Колір: {car.Color}");
-    Console.WriteLine($"Максимальна швидкість: {car.MaxSpeed} км/год");
-    Console.WriteLine($"Номер: {car.Number}");
-    Console.WriteLine($"Вага: {car.Weight} кг");
+    
+    Console.WriteLine("\nКраїна   Назва    Марка    Колір       Швидкість      Маса");
+    Console.WriteLine(car.ToString());   
 }
 
 Console.WriteLine("Початок роботи");
@@ -48,7 +43,7 @@ do
         {
             Console.WriteLine("\nВиберіть операцію:\n" +
                 " Додати автомобіль -> 1\n Вивести на екран автомобілі -> 2\n Знайти автомобіль -> 3\n" +
-                " Видалити автомобіль -> 4\n Демонстрація поведінки класу -> 5\n Вихід із програми -> 0");
+                " Видалити автомобіль -> 4\n Демонстрація поведінки класу -> 5\nДемонстрація роботи статичного методу -> 6\n Вихід із програми -> 0");
             Console.WriteLine("Оберіть операцію:");
             if (!short.TryParse(Console.ReadLine(), out short selection))
             {
@@ -103,7 +98,7 @@ do
                                         {
                                             Repeat = false;
                                             Console.Write("Введіть інформацію про авто в такому форматі (Для коректного визначення використовуйте англійську): ");
-                                            Console.WriteLine("\nНазва , Номер , Марка , Колір , Максимальна швидкість , Вага");
+                                            Console.WriteLine("\nНазва , Марка , Колір , Максимальна швидкість , Номер , Вага");
 
                                             if (!Car.TryParse(Console.ReadLine(), true, out Car obj)) 
                                             {
@@ -134,6 +129,7 @@ do
                     if (cars.Count > 0)
                     {
                         Console.WriteLine($"Кількість об'єктів->{Car.Count}");
+                        Console.WriteLine("\nІнформація про автомобілі:");
                         for (int i = 0; i < cars.Count; i++) 
                         {
                             PrintCarInfo(cars[i]);
@@ -397,6 +393,55 @@ do
                     }
                     else                    
                         Console.WriteLine("Об'єкти не знайдено");                    
+                    break;
+                case 6:
+                    if (cars.Count >= 2)
+                    {
+                        bool Repeat;
+                        do
+                        {
+                            Repeat = false;
+                            Console.WriteLine("Введіть назву двох автомобілів для порівняння максимальної швидкості");
+                            List<short> equalslist = new List<short>();
+
+                            for (int i = 1; i <= 2; i++)
+                            {
+                                Console.WriteLine($"Назва {i}-го автомобіля:");
+                                string name_for_equals = Console.ReadLine();
+
+                                short carforEquals = (short)cars.FindIndex(c => c.NameModel.Equals(name_for_equals, StringComparison.OrdinalIgnoreCase));
+
+                                if (carforEquals == -1)
+                                {
+                                    Console.WriteLine($"Автомобіль із назвою \"{name_for_equals}\" не знайдено. Спробуйте ще раз.");
+                                    Repeat = true;
+                                    break;
+                                }
+
+                                equalslist.Add(carforEquals);
+                            }
+
+                            if (!Repeat)
+                            {
+                                try
+                                {
+                                    Car fasterCar = Car.CompareMaxSpeed(cars[equalslist[0]], cars[equalslist[1]]);
+                                    Console.WriteLine($"Автомобіль із вищою максимальною швидкістю: {fasterCar.NameModel}");
+                                }
+                                catch (Exception ex)
+                                {
+                                    Console.WriteLine($"Сталася помилка: {ex.Message}");
+                                    Repeat = true;
+                                }
+                            }
+
+                        } while (Repeat);
+                    }
+                    else
+                    {
+                        Console.WriteLine($"Не достатньо автомобілів для порівняння ");
+                    }
+
                     break;
                 case 0:
                     Console.WriteLine("Завершення роботи");

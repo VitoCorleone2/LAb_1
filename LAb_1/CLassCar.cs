@@ -276,11 +276,11 @@ namespace LAb_1
                 if (parts.Length != 6)
                     throw new FormatException("Невірний формат рядка");
 
-                string nameModel = parts[0].Trim();
-                short number = short.Parse(parts[1].Trim());
-                BrandCar brand = (BrandCar)Enum.Parse(typeof(BrandCar), parts[2].Trim(), true);
-                ColorCar color = (ColorCar)Enum.Parse(typeof(ColorCar), parts[3].Trim(), true);
-                int maxSpeed = int.Parse(parts[4].Trim());
+                string nameModel = parts[0].Trim();              
+                BrandCar brand = (BrandCar)Enum.Parse(typeof(BrandCar), parts[1].Trim(), true);
+                ColorCar color = (ColorCar)Enum.Parse(typeof(ColorCar), parts[2].Trim(), true);
+                int maxSpeed = int.Parse(parts[3].Trim());
+                short number = short.Parse(parts[4].Trim());
                 float weight = float.Parse(parts[5].Trim());
 
                 return new Car(nameModel, (short)brand, (short)color, maxSpeed, number, weight);
@@ -313,9 +313,15 @@ namespace LAb_1
         }
         public override string ToString()
         {
-            return $"{name_model}, {brand}, {color}, {max_speed}, {weight}";
+            return $"{country} | {name_model} |  {brand}   |    {color}    |   {max_speed}   | {weight}";
         }
+        public static Car CompareMaxSpeed(Car car1, Car car2)
+        {
+            if (car1 == null || car2 == null)
+                throw new ArgumentNullException("Автомобілі не можуть бути null.");
 
+            return car1.MaxSpeed >= car2.MaxSpeed ? car1 : car2;
+        }
     }
 }
 
