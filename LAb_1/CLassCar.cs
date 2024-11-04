@@ -14,7 +14,7 @@ using System.Xml.Linq;
 
 namespace LAb_1
 {
-    class Car
+     class Car
     {
         private string name_model = "UNKNOW";
         private static string country = "UNKNOW";
