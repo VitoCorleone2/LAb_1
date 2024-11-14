@@ -467,7 +467,7 @@ do
                         catch (Exception ex)
                         {
 
-                            Console.WriteLine(ex.Message);  
+                            Console.WriteLine(ex.Message);
                         }
                         Console.WriteLine($"Колекцію збережено у файл {saveFileName}.csv.");
                     }
@@ -484,20 +484,44 @@ do
                     break;
 
                 case 8:
-                    Console.WriteLine("Зчитати  у файл csv -> 1\nЗчитати у файл json -> 2");
+                    Console.WriteLine("Зчитати з файл csv -> 1\nЗчитати з файл json -> 2");
                     int loadChoice = int.Parse(Console.ReadLine());
 
-                    Console.Write("Введіть назву файлу для зчитування : ");
+                    Console.Write("Введіть назву файлу для зчитування: ");
                     string loadFileName = Console.ReadLine();
 
                     if (loadChoice == 1)
                     {
                         List<string> lines = new List<string>();
-                        lines=File.ReadAllLines(loadFileName).ToList();
-                        foreach (var item in lines)
+
+                        try
                         {
-                            bool result = Car.TryParse(item ,out Car? car );
-                            if (result) cars.Add(car);
+                            
+                            lines = File.ReadAllLines(loadFileName).ToList();
+
+                            foreach (var item in lines)
+                            {                              
+                                try
+                                {
+                                  
+                                    Car? car = Car.Parse(item);
+                                    if (car != null)
+                                    {
+                                        cars.Add(car); 
+                                    }
+                                }
+                                catch (FormatException ex)
+                                {
+                                   
+                                    Console.WriteLine($"Не вдалося розібрати рядок: {item}. Помилка: {ex.Message}");
+                                }
+                            }
+
+                            Console.WriteLine("Колекцію зчитано з файлу csv.");
+                        }
+                        catch (Exception ex)
+                        {
+                            Console.WriteLine($"Помилка при зчитуванні файлу: {ex.Message}");
                         }
                     }
                     else if (loadChoice == 2)
@@ -505,8 +529,18 @@ do
                         if (File.Exists($"{loadFileName}.json"))
                         {
                             string json = File.ReadAllText($"{loadFileName}.json");
-                            cars = JsonSerializer.Deserialize<List<Car>>(json);
-                            Console.WriteLine($"Колекцію зчитано з файлу {loadFileName}.json.");
+
+                           
+                            var loadedCars = JsonSerializer.Deserialize<List<Car>>(json);
+                            if (loadedCars != null)
+                            {
+                                cars.AddRange(loadedCars);
+                                Console.WriteLine($"Колекцію зчитано з файлу {loadFileName}.json.");
+                            }
+                            else
+                            {
+                                Console.WriteLine("Не вдалося десеріалізувати дані з JSON.");
+                            }
                         }
                         else
                         {

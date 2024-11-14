@@ -142,7 +142,7 @@ namespace LAb_1
             }
         }
 
-        public short Fuel
+       public  short Fuel
         {
             get { return fuel; }
              set { fuel = value; }
@@ -271,36 +271,75 @@ namespace LAb_1
                 throw new FormatException("Рядок не може бути порожнім");
 
             char[] chars = { '/', ',', '.', '(', ')', '|', '{', '}' };
-            var parts = s.Split(chars);
+            var parts = s.Split(chars, StringSplitOptions.RemoveEmptyEntries);
 
 
-            if (parts.Length == 6)
+         
+            parts = parts.Select(p => p.Trim()).ToArray();
+
+            
+            if (parts.Length == 7)
             {
-                string nameModel = parts[0].Trim();
-                BrandCar brand = (BrandCar)Enum.Parse(typeof(BrandCar), parts[1].Trim(), true);
-                ColorCar color = (ColorCar)Enum.Parse(typeof(ColorCar), parts[2].Trim(), true);
-                int maxSpeed = int.Parse(parts[3].Trim());
-                short number = short.Parse(parts[4].Trim());
-                float weight = float.Parse(parts[5].Trim());
+                try
+                {
+                    string nameModel = parts[1].Trim();
 
-                return new Car(nameModel, (short)brand, (short)color, maxSpeed, number, weight);
+                  
+                    if (!Enum.TryParse(parts[2].Trim(), true, out BrandCar brand))
+                        throw new FormatException($"Невідомий бренд автомобіля: {parts[1].Trim()}");
+
+                  
+                    if (!Enum.TryParse(parts[3].Trim(), true, out ColorCar color))
+                        throw new FormatException($"Невідомий колір автомобіля: {parts[2].Trim()}");
+
+                    if (!int.TryParse(parts[4].Trim(), out int maxSpeed))
+                        throw new FormatException($"Невірний формат швидкості: {parts[3].Trim()}");
+
+                   
+                    if (!short.TryParse(parts[5].Trim(), out short number))
+                        throw new FormatException($"Невірний формат номеру: {parts[4].Trim()}");
+
+                   
+                    if (!float.TryParse(parts[6].Trim(), out float weight))
+                        throw new FormatException($"Невірний формат ваги: {parts[5].Trim()}");
+
+                    
+                    string country = parts[0].Trim();
+
+                    return new Car(nameModel, (short)brand, (short)color, maxSpeed, number, weight);
+                }
+                catch (Exception ex)
+                {
+                    throw new FormatException($"Невірний формат даних: {ex.Message}");
+                }
             }
             else if (parts.Length == 3)
             {
-               
+                try
+                {
                     string nameModel = parts[0].Trim();
-                    BrandCar brand = (BrandCar)Enum.Parse(typeof(BrandCar), parts[1].Trim(), true);
-                    ColorCar color = (ColorCar)Enum.Parse(typeof(ColorCar), parts[2].Trim(), true);
+
+                    // Перевірка бренду
+                    if (!Enum.TryParse(parts[1].Trim(), true, out BrandCar brand))
+                        throw new FormatException($"Невідомий бренд автомобіля: {parts[1].Trim()}");
+
+                    // Перевірка кольору
+                    if (!Enum.TryParse(parts[2].Trim(), true, out ColorCar color))
+                        throw new FormatException($"Невідомий колір автомобіля: {parts[2].Trim()}");
 
                     return new Car(nameModel, (short)brand, (short)color);
-                
-
+                }
+                catch (Exception ex)
+                {
+                    throw new FormatException($"Помилка при парсингу: {ex.Message}");
+                }
             }
-            else 
-                throw new FormatException("Невірний формат рядка");
+            else
+            {
+                throw new FormatException("Невірний формат рядка.");
+            }
         }
-
-        public static bool TryParse(string s, out Car obj)
+            public static bool TryParse(string s, out Car obj)
         {
             try
             {
