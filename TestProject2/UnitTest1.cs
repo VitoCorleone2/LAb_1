@@ -198,65 +198,50 @@ namespace TestProject2
                 Assert.AreEqual(fuel, car.Fuel);
             }
             [TestMethod]
-            [DataRow("AutoName/FORD/RED/180/1234/1400", true)]
-            [DataRow("AutoName, FORD, RED, 180, 1234, 1400", true)]
+            [DataRow("AutoName/FORD/RED/180/1234/1400",true)]
+            [DataRow("AutoName, FORD, RED, 180, 1234, 1400",true)]
             [DataRow("AutoName-FORD-RED-180-1234-1400", false)]
-            [DataRow("", false)]
-            [DataRow("AutoName/FORD/RED/180/1234", false)]
-            void ParseFullFormatTest(string input, bool expected)
+            [DataRow("AutoName/FORD/RED/180/1234",false)]
+            [DataRow("AutoName/FORD/RED", true)]
+            [DataRow("AutoName, FORD, RED", true)]
+            [DataRow("AutoName-FORD-RED",false)]
+            [DataRow(" ", false)]
+            [DataRow("AutoName/FORD", false)]
+            public void ParseTest(string input, bool expected)
             {
                 // Arrange
                 // Act & Assert
                 if (expected)
                 {
-                    var car = Car.Parse(input, true);
+                    var car = Car.Parse(input);
                     Assert.IsNotNull(car);
                 }
                 else
                 {
-                    Assert.ThrowsException<FormatException>(() => Car.Parse(input, true));
+                    Assert.ThrowsException<FormatException>(() => Car.Parse(input));
                 }
             }
 
+           
+          
             [TestMethod]
-            [DataRow("AutoName/FORD/RED", true)]
-            [DataRow("AutoName, FORD, RED", true)]
+            [DataRow("AutoName/FORD/RED/180/1234/1400",true)]
+            [DataRow("AutoName, FORD, RED, 180, 1234, 1400",true)]
+            [DataRow("AutoName-FORD-RED-180-1234-1400", false)]
+            [DataRow("",  false)]
+            [DataRow("AutoName/FORD/RED/180/1234", false)]
+            [DataRow("AutoName/FORD/RED",  true)]
+            [DataRow("AutoName, FORD, RED",  true)]
             [DataRow("AutoName-FORD-RED", false)]
             [DataRow("", false)]
             [DataRow("AutoName/FORD", false)]
-            void ParseShortFormatTest(string input, bool expected)
-            {
-                // Arrange
-                // Act & Assert
-                if (expected)
-                {
-                    var car = Car.Parse(input, false);
-                    Assert.IsNotNull(car);
-                }
-                else
-                {
-                    Assert.ThrowsException<FormatException>(() => Car.Parse(input, false));
-                }
-            }
-
-            [TestMethod]
-            [DataRow("AutoName/FORD/RED/180/1234/1400", true, true)]
-            [DataRow("AutoName, FORD, RED, 180, 1234, 1400", true, true)]
-            [DataRow("AutoName-FORD-RED-180-1234-1400", true, false)]
-            [DataRow("", true, false)]
-            [DataRow("AutoName/FORD/RED/180/1234", true, false)]
-            [DataRow("AutoName/FORD/RED", false, true)]
-            [DataRow("AutoName, FORD, RED", false, true)]
-            [DataRow("AutoName-FORD-RED", false, false)]
-            [DataRow("", false, false)]
-            [DataRow("AutoName/FORD", false, false)]
-            void TryParseTest(string input, bool fullFormat, bool expected)
+           public void TryParseTest(string input, bool expected)
             {
                 // Arrange
                 Car car;
 
                 // Act
-                var result = Car.TryParse(input, fullFormat, out car);
+                var result = Car.TryParse(input,  out car);
 
                 // Assert
                 Assert.AreEqual(expected, result);
@@ -271,7 +256,7 @@ namespace TestProject2
             }
 
             [TestMethod]
-            void EngineStartWorkTest()
+           public void EngineStartWorkTest()
             {
                 // Arrange
                 Car car = new Car();
@@ -285,7 +270,7 @@ namespace TestProject2
             }
 
             [TestMethod]
-            void EngineStartWork_NoFuelTest()
+           public void EngineStartWork_NoFuelTest()
             {
                 // Arrange
                 Car car = new Car();
@@ -296,7 +281,7 @@ namespace TestProject2
             }
 
             [TestMethod]
-            void EngineStopWorkTest()
+           public void EngineStopWorkTest()
             {
                 // Arrange
                 Car car = new Car();
@@ -311,12 +296,12 @@ namespace TestProject2
             }
 
             [TestMethod]
-            [DataRow(1, true)]
-            [DataRow(2, true)]
-            [DataRow(3, true)]
-            [DataRow(4, true)]
-            [DataRow(0, false)]
-            void StartTravelTest(short distance, bool expected)
+            [DataRow((short)1, true)]
+            [DataRow((short)2, true)]
+            [DataRow((short)3, true)]
+            [DataRow((short)4, true)]
+            [DataRow((short)0, false)]
+           public void StartTravelTest(short distance, bool expected)
             {
                 // Arrange
                 Car car = new Car();
@@ -336,7 +321,7 @@ namespace TestProject2
 
         }
     }
-    }
+}
 
 
 

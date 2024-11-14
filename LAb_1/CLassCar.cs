@@ -206,6 +206,8 @@ namespace LAb_1
                 case 4:
                     required_amount_of_fuel = Fuel;
                     break;
+                    default:
+                    throw new ArgumentOutOfRangeException("Не коректне значення відстані !");
             }
 
 
@@ -263,20 +265,18 @@ namespace LAb_1
             Number = NumberCar;
             Count++;
         }
-        public static Car Parse(string s, bool fullFormat = true)
+        public static Car Parse(string s)
         {
             if (string.IsNullOrEmpty(s))
-                throw new ArgumentNullException("Рядок не може бути порожнім");
+                throw new FormatException("Рядок не може бути порожнім");
 
             char[] chars = { '/', ',', '.', '(', ')', '|', '{', '}' };
             var parts = s.Split(chars);
 
-            if (fullFormat)
-            {
-                if (parts.Length != 6)
-                    throw new FormatException("Невірний формат рядка");
 
-                string nameModel = parts[0].Trim();              
+            if (parts.Length == 6)
+            {
+                string nameModel = parts[0].Trim();
                 BrandCar brand = (BrandCar)Enum.Parse(typeof(BrandCar), parts[1].Trim(), true);
                 ColorCar color = (ColorCar)Enum.Parse(typeof(ColorCar), parts[2].Trim(), true);
                 int maxSpeed = int.Parse(parts[3].Trim());
@@ -285,24 +285,26 @@ namespace LAb_1
 
                 return new Car(nameModel, (short)brand, (short)color, maxSpeed, number, weight);
             }
-            else
+            else if (parts.Length == 3)
             {
-                if (parts.Length != 3)
-                    throw new FormatException("Невірний формат скороченого рядка");
+               
+                    string nameModel = parts[0].Trim();
+                    BrandCar brand = (BrandCar)Enum.Parse(typeof(BrandCar), parts[1].Trim(), true);
+                    ColorCar color = (ColorCar)Enum.Parse(typeof(ColorCar), parts[2].Trim(), true);
 
-                string nameModel = parts[0].Trim();
-                BrandCar brand = (BrandCar)Enum.Parse(typeof(BrandCar), parts[1].Trim(), true);
-                ColorCar color = (ColorCar)Enum.Parse(typeof(ColorCar), parts[2].Trim(), true);
+                    return new Car(nameModel, (short)brand, (short)color);
+                
 
-                return new Car(nameModel, (short)brand, (short)color);
             }
+            else 
+                throw new FormatException("Невірний формат рядка");
         }
 
-        public static bool TryParse(string s, bool fullFormat, out Car obj)
+        public static bool TryParse(string s, out Car obj)
         {
             try
             {
-                obj = Parse(s, fullFormat);
+                obj = Parse(s);
                 return true;
             }
             catch
@@ -313,7 +315,7 @@ namespace LAb_1
         }
         public override string ToString()
         {
-            return $"{country} | {name_model} |  {brand}   |    {color}    |   {max_speed}   | {weight}";
+            return $"{country} | {name_model} |  {brand}   |    {color}     |  {max_speed}  |{number}  | {weight}";
         }
         public static Car CompareMaxSpeed(Car car1, Car car2)
         {

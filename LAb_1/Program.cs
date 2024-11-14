@@ -2,7 +2,10 @@
 using System;
 using System.ComponentModel.Design;
 using System.Drawing;
+using System.Formats.Asn1;
+using System.Globalization;
 using System.Net.Http.Headers;
+using System.Text.Json;
 using System.Xml.Linq;
 using System.Xml.Serialization;
 using static System.Runtime.InteropServices.JavaScript.JSType;
@@ -11,7 +14,7 @@ using static System.Runtime.InteropServices.JavaScript.JSType;
 void PrintCarInfo(Car car)
 {
     
-    Console.WriteLine("\nКраїна   Назва    Марка    Колір       Швидкість      Маса");
+    Console.WriteLine("\nКраїна   Назва    Марка    Колір       Швидкість   Номер    Маса");
     Console.WriteLine(car.ToString());   
 }
 
@@ -43,7 +46,8 @@ do
         {
             Console.WriteLine("\nВиберіть операцію:\n" +
                 " Додати автомобіль -> 1\n Вивести на екран автомобілі -> 2\n Знайти автомобіль -> 3\n" +
-                " Видалити автомобіль -> 4\n Демонстрація поведінки класу -> 5\nДемонстрація роботи статичного методу -> 6\n Вихід із програми -> 0");
+                " Видалити автомобіль -> 4\n Демонстрація поведінки класу -> 5\nДемонстрація роботи статичного методу -> 6\n" +
+                "Зберігти коелкцію об'єктів у файл ->7\nЗчитати колекцію з файлу -> 8\nОчистити колекцію -> 9 \n Вихід із програми -> 0");
             Console.WriteLine("Оберіть операцію:");
             if (!short.TryParse(Console.ReadLine(), out short selection))
             {
@@ -78,7 +82,7 @@ do
                                             Console.Write("Введіть інформацію про авто в такому форматі (Для коректного визначення використовуйте англійську): ");
                                             Console.WriteLine("\nНазва , Марка , Колір");
 
-                                            if (!Car.TryParse(Console.ReadLine(), false, out Car obj))
+                                            if (!Car.TryParse(Console.ReadLine(),  out Car obj))
                                             {
                                                 Repeat = true;
                                                 Console.WriteLine("Невірний формат введених даних");
@@ -100,7 +104,7 @@ do
                                             Console.Write("Введіть інформацію про авто в такому форматі (Для коректного визначення використовуйте англійську): ");
                                             Console.WriteLine("\nНазва , Марка , Колір , Максимальна швидкість , Номер , Вага");
 
-                                            if (!Car.TryParse(Console.ReadLine(), true, out Car obj)) 
+                                            if (!Car.TryParse(Console.ReadLine(),  out Car obj)) 
                                             {
                                                 Repeat = true;
                                                 Console.WriteLine("Невірний формат введених даних");
@@ -441,7 +445,82 @@ do
                     {
                         Console.WriteLine($"Не достатньо автомобілів для порівняння ");
                     }
+                    break;
+                case 7:
+                    Console.WriteLine("Зберегти у файл csv -> 1\nЗберігти у файл json -> 2");                  
+                    int saveChoice = int.Parse(Console.ReadLine());
 
+                    Console.Write("Введіть назву файлу для збереження : ");
+                    string saveFileName = Console.ReadLine();
+
+                    if (saveChoice == 1)
+                    {
+                       List<string>? lines = new List<string>();
+                        foreach (var item in cars)
+                        {
+                            lines.Add(item.ToString());
+                        }
+                        try
+                        {
+                            File.WriteAllLines(saveFileName, lines);
+                        }
+                        catch (Exception ex)
+                        {
+
+                            Console.WriteLine(ex.Message);  
+                        }
+                        Console.WriteLine($"Колекцію збережено у файл {saveFileName}.csv.");
+                    }
+                    else if (saveChoice == 2)
+                    {
+                        string json = JsonSerializer.Serialize(cars);
+                        File.WriteAllText($"{saveFileName}.json", json);
+                        Console.WriteLine($"Колекцію збережено у файл {saveFileName}.json.");
+                    }
+                    else
+                    {
+                        Console.WriteLine("Невірний вибір");
+                    }
+                    break;
+
+                case 8:
+                    Console.WriteLine("Зчитати  у файл csv -> 1\nЗчитати у файл json -> 2");
+                    int loadChoice = int.Parse(Console.ReadLine());
+
+                    Console.Write("Введіть назву файлу для зчитування : ");
+                    string loadFileName = Console.ReadLine();
+
+                    if (loadChoice == 1)
+                    {
+                        List<string> lines = new List<string>();
+                        lines=File.ReadAllLines(loadFileName).ToList();
+                        foreach (var item in lines)
+                        {
+                            bool result = Car.TryParse(item ,out Car? car );
+                            if (result) cars.Add(car);
+                        }
+                    }
+                    else if (loadChoice == 2)
+                    {
+                        if (File.Exists($"{loadFileName}.json"))
+                        {
+                            string json = File.ReadAllText($"{loadFileName}.json");
+                            cars = JsonSerializer.Deserialize<List<Car>>(json);
+                            Console.WriteLine($"Колекцію зчитано з файлу {loadFileName}.json.");
+                        }
+                        else
+                        {
+                            Console.WriteLine($"Файл {loadFileName}.json не знайдено.");
+                        }
+                    }
+                    else
+                    {
+                        Console.WriteLine("Невірний вибір");
+                    }
+                    break;
+                case 9:
+                    cars.Clear();
+                    Console.WriteLine("Колекцію очищено ");
                     break;
                 case 0:
                     Console.WriteLine("Завершення роботи");
